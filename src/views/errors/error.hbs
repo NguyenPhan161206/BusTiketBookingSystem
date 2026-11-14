@@ -1,0 +1,8 @@
+<div class="text-center py-5">
+  <h1 class="display-4 fw-bold">{{status}}</h1>
+  <p class="lead">{{message}}</p>
+  <a href="/" class="btn btn-primary">Về trang chủ</a>
+</div>
+{{#if stack}}
+  <pre class="small bg-body-tertiary border rounded p-3 overflow-auto">{{stack}}</pre>
+{{/if}}

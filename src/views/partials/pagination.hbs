@@ -1,0 +1,18 @@
+{{!-- Dùng: {{> pagination pagination=pagination}}  (pagination lấy từ utils/paginate) --}}
+{{#if (gt pagination.totalPages 1)}}
+<nav aria-label="Phân trang">
+  <ul class="pagination justify-content-center flex-wrap">
+    <li class="page-item {{#unless pagination.hasPrev}}disabled{{/unless}}">
+      <a class="page-link" href="{{#if pagination.hasPrev}}{{pageUrl pagination.prevPage}}{{else}}#{{/if}}">&laquo;</a>
+    </li>
+    {{#each (range 1 pagination.totalPages)}}
+      <li class="page-item {{#if (eq this ../pagination.page)}}active{{/if}}">
+        <a class="page-link" href="{{pageUrl this}}">{{this}}</a>
+      </li>
+    {{/each}}
+    <li class="page-item {{#unless pagination.hasNext}}disabled{{/unless}}">
+      <a class="page-link" href="{{#if pagination.hasNext}}{{pageUrl pagination.nextPage}}{{else}}#{{/if}}">&raquo;</a>
+    </li>
+  </ul>
+</nav>
+{{/if}}
