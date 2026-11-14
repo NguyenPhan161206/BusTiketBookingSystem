@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-md-4 mb-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-body text-center p-4">
+        <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; font-size: 32px; font-weight: bold;">
+          {{currentUser.fullName.[0]}}
+        </div>
+        <h5 class="fw-bold mb-1">{{currentUser.fullName}}</h5>
+        <p class="text-secondary small mb-2">{{currentUser.email}}</p>
+        <span class="badge bg-secondary text-uppercase">{{currentUser.role}}</span>
+      </div>
+      <div class="list-group list-group-flush border-top">
+        <a href="/account/profile" class="list-group-item list-group-item-action">
+          Hồ sơ cá nhân
+        </a>
+        <a href="/account/bookings" class="list-group-item list-group-item-action active">
+          Lịch sử đặt vé
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="card-title fw-bold mb-0">Lịch sử đặt vé</h5>
+        <a href="/" class="btn btn-sm btn-outline-primary">Đặt vé mới</a>
+      </div>
+      <div class="card-body p-4">
+        {{#if bookings.length}}
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>Mã vé</th>
+                  <th>Chuyến xe</th>
+                  <th>Ngày khởi hành</th>
+                  <th>Tổng tiền</th>
+                  <th>Trạng thái</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each bookings}}
+                  <tr>
+                    <td class="fw-semibold">#{{this.code}}</td>
+                    <td>{{this.trip_name}}</td>
+                    <td>{{formatDate this.departure_time "datetime"}}</td>
+                    <td class="text-primary fw-semibold">{{formatCurrency this.total_amount}}</td>
+                    <td>
+                      <span class="badge bg-info text-capitalize">{{this.status}}</span>
+                    </td>
+                    <td>
+                      <a href="/bookings/{{this.code}}" class="btn btn-sm btn-light">Chi tiết</a>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        {{else}}
+          <div class="text-center py-5 text-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-ticket-perforated mb-3 text-muted" viewBox="0 0 16 16">
+              <path d="M4 4.85v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9z"/>
+              <path d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3zM1 4.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v1.05a2.5 2.5 0 0 0 0 4.9v1.05a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-1.05a2.5 2.5 0 0 0 0-4.9z"/>
+            </svg>
+            <p class="mb-3">Bạn chưa có lịch sử đặt vé nào.</p>
+            <a href="/" class="btn btn-primary">Tìm chuyến và đặt vé ngay</a>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>

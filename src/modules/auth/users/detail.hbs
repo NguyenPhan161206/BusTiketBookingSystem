@@ -1,0 +1,85 @@
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="d-flex align-items-center mb-3">
+      <a href="/admin/users" class="btn btn-outline-secondary btn-sm me-2">&larr; Quay lại danh sách</a>
+      <h1 class="h4 fw-bold mb-0">Chi tiết người dùng: {{user.full_name}}</h1>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body p-4">
+        <form method="post" action="/admin/users/{{user.id}}">
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" value="{{user.email}}" disabled>
+              <div class="form-text">
+                Trạng thái email:
+                {{#if user.email_verified_at}}
+                  <span class="text-success fw-semibold">Đã xác thực ({{formatDate user.email_verified_at "datetime"}})</span>
+                {{else}}
+                  <span class="text-warning fw-semibold">Chưa xác thực</span>
+                {{/if}}
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="fullName" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                id="fullName"
+                name="fullName"
+                value="{{user.full_name}}"
+                required
+              >
+            </div>
+
+            <div class="col-md-6">
+              <label for="phone" class="form-label">Số điện thoại</label>
+              <input
+                type="tel"
+                class="form-control"
+                id="phone"
+                name="phone"
+                value="{{user.phone}}"
+                placeholder="0901234567"
+              >
+            </div>
+
+            <div class="col-md-6">
+              <label for="role" class="form-label">Vai trò</label>
+              <select class="form-select" id="role" name="role" {{#if (eq user.id currentUser.id)}}disabled{{/if}}>
+                <option value="customer" {{#if (eq user.role "customer")}}selected{{/if}}>Khách hàng (customer)</option>
+                <option value="staff" {{#if (eq user.role "staff")}}selected{{/if}}>Nhân viên soát vé (staff)</option>
+                <option value="admin" {{#if (eq user.role "admin")}}selected{{/if}}>Quản trị viên (admin)</option>
+              </select>
+              {{#if (eq user.id currentUser.id)}}
+                <div class="form-text text-muted">Bạn không thể tự thay đổi vai trò của chính mình.</div>
+              {{/if}}
+            </div>
+
+            <div class="col-md-6">
+              <label for="isActive" class="form-label">Trạng thái tài khoản</label>
+              <select class="form-select" id="isActive" name="isActive" {{#if (eq user.id currentUser.id)}}disabled{{/if}}>
+                <option value="1" {{#if user.is_active}}selected{{/if}}>Hoạt động</option>
+                <option value="0" {{#if (not user.is_active)}}selected{{/if}}>Khóa tài khoản</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Ngày tạo</label>
+              <input type="text" class="form-control" value="{{formatDate user.created_at "datetime"}}" disabled>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+            <a href="/admin/users" class="btn btn-outline-secondary">Hủy</a>
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

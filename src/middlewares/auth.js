@@ -1,34 +1,78 @@
+const createError = require('http-errors');
+const { fail } = require('../utils/apiResponse');
+
 /**
- * ⚠️ STUB - TV1 (Tài khoản, xác thực và bảo mật) sẽ viết logic thật.
- *
- * Chữ ký hàm đã cố định để các module khác dùng ngay từ bây giờ:
- *   const { requireAuth, requireRole } = require('../../../middlewares/auth');
- *   router.get('/account/bookings', requireAuth, controller.history);
- *   router.use('/admin', requireRole('admin'));
- *   router.get('/staff/trips/:id/passengers', requireRole('staff', 'admin'), controller.list);
- *
- * Hiện tại cả hai đều cho qua (next()) để mọi người phát triển song song.
+ * Kiểm tra xem request có phải yêu cầu JSON/AJAX hay không.
  */
-const logger = require('../utils/logger');
-
-let warned = false;
-const warnOnce = () => {
-  if (!warned) {
-    logger.warn('middlewares/auth.js đang là STUB - chưa kiểm tra đăng nhập/phân quyền.');
-    warned = true;
-  }
-};
-
-function requireAuth(_req, _res, next) {
-  warnOnce();
-  return next();
+function isApiOrAjaxRequest(req) {
+  return (
+    req.xhr ||
+    req.path.startsWith('/api') ||
+    (req.headers.accept && req.headers.accept.includes('application/json'))
+  );
 }
 
-function requireRole(..._roles) {
-  return (_req, _res, next) => {
-    warnOnce();
+/**
+ * Middleware bắt buộc phải đăng nhập.
+ */
+function requireAuth(req, res, next) {
+  if (req.session && req.session.user) {
+    return next();
+  }
+
+  if (isApiOrAjaxRequest(req)) {
+    return fail(res, 'Vui lòng đăng nhập để tiếp tục', 401);
+  }
+
+  if (req.session) {
+    req.session.returnTo = req.originalUrl;
+  }
+  req.flash('warning', 'Vui lòng đăng nhập để tiếp tục');
+  return res.redirect('/auth/login');
+}
+
+/**
+ * Middleware bắt buộc vai trò người dùng (vd: 'admin', 'staff').
+ */
+function requireRole(...roles) {
+  return (req, res, next) => {
+    if (!req.session || !req.session.user) {
+      if (isApiOrAjaxRequest(req)) {
+        return fail(res, 'Vui lòng đăng nhập để tiếp tục', 401);
+      }
+      if (req.session) {
+        req.session.returnTo = req.originalUrl;
+      }
+      req.flash('warning', 'Vui lòng đăng nhập để tiếp tục');
+      return res.redirect('/auth/login');
+    }
+
+    if (!roles.includes(req.session.user.role)) {
+      if (isApiOrAjaxRequest(req)) {
+        return fail(res, 'Bạn không có quyền truy cập chức năng này', 403);
+      }
+      return next(createError(403, 'Bạn không có quyền truy cập chức năng này'));
+    }
+
     return next();
   };
 }
 
-module.exports = { requireAuth, requireRole };
+/**
+ * Middleware điều hướng người dùng đã đăng nhập (tránh truy cập lại trang login/register).
+ */
+function redirectIfAuth(req, res, next) {
+  if (req.session && req.session.user) {
+    if (req.session.user.role === 'admin') {
+      return res.redirect('/admin');
+    }
+    return res.redirect('/');
+  }
+  return next();
+}
+
+module.exports = {
+  requireAuth,
+  requireRole,
+  redirectIfAuth,
+};
