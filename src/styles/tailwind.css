@@ -1,0 +1,10 @@
+/*
+ * Tailwind CSS cho TRANG TĨNH (layout static).
+ * Build: npm run build:css   |   Theo dõi khi phát triển: npm run watch:css
+ * Chỉ quét layout static và view nằm trong thư mục tên `static-pages` của bất kỳ module nào
+ * (vd: src/modules/catalog/static-pages/about.hbs) để không ảnh hưởng trang dùng Bootstrap.
+ */
+@import 'tailwindcss' source(none);
+
+@source '../views/layouts/static.hbs';
+@source '../modules/**/static-pages/**/*.hbs';

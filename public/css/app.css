@@ -1,0 +1,8 @@
+/*
+ * CSS dùng chung cho các trang Bootstrap (layout customer, admin).
+ * CSS riêng của từng trang: tạo file public/css/<module>-<trang>.css
+ * rồi nạp qua {{#section "head"}}<link rel="stylesheet" href="...">{{/section}}
+ */
+:root {
+  --bts-primary: var(--bs-primary);
+}

@@ -1,0 +1,6 @@
+node_modules
+public/css/tailwind.css
+public/uploads
+package-lock.json
+*.hbs
+Bus-Ticket-Booking-System.md

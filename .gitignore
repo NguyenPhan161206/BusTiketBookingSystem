@@ -1,3 +1,22 @@
-.claude/
-CLAUDE.md
-CLAUDE.local.md
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Build output
+public/css/tailwind.css
+
+# Uploaded files (giữ lại thư mục)
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Logs / OS / editor
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

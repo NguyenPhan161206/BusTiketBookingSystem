@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{csrfToken}}">
+  <title>{{#if title}}{{title}} | {{/if}}{{appName}}</title>
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/app.css">
+  {{{_sections.head}}}
+</head>
+<body class="d-flex flex-column min-vh-100">
+  {{!-- ============================================================
+       LAYOUT KHÁCH HÀNG - khung trống do base dựng.
+       TV3 phụ trách hoàn thiện header / navbar / footer.
+       ============================================================ --}}
+  <header>
+    {{!-- TODO(TV3): navbar khách hàng (logo, menu, đăng nhập/tài khoản) --}}
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+      <div class="container">
+        <a class="navbar-brand fw-semibold" href="/">{{appName}}</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-grow-1 py-4">
+    <div class="container">
+      {{> flash}}
+      {{{body}}}
+    </div>
+  </main>
+
+  <footer class="border-top py-3 mt-auto">
+    {{!-- TODO(TV3): footer khách hàng --}}
+    <div class="container small text-body-secondary">&copy; {{year}} {{appName}}</div>
+  </footer>
+
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/app.js"></script>
+  {{{_sections.scripts}}}
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{csrfToken}}">
+  <title>{{#if title}}{{title}} | {{/if}}{{appName}}</title>
+  {{!-- Trang tĩnh dùng Tailwind CSS (KHÔNG trộn với Bootstrap).
+       CSS build từ src/styles/tailwind.css, chỉ quét class trong src/views/static/ --}}
+  <link rel="stylesheet" href="/css/tailwind.css">
+  {{{_sections.head}}}
+</head>
+<body class="min-h-screen flex flex-col bg-white text-slate-800">
+  {{!-- ============================================================
+       LAYOUT TRANG TĨNH - khung trống do base dựng. TV2 hoàn thiện.
+       Dùng: res.render('static/about', { layout: 'static', title: 'Giới thiệu' })
+       ============================================================ --}}
+  <header class="border-b">
+    {{!-- TODO(TV2): header trang tĩnh --}}
+    <div class="mx-auto max-w-6xl px-4 py-3">
+      <a href="/" class="font-semibold">{{appName}}</a>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    {{{body}}}
+  </main>
+
+  <footer class="border-t">
+    {{!-- TODO(TV2): footer trang tĩnh --}}
+    <div class="mx-auto max-w-6xl px-4 py-3 text-sm text-slate-500">&copy; {{year}} {{appName}}</div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+  {{{_sections.scripts}}}
+</body>
+</html>
