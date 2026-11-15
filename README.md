@@ -8,7 +8,7 @@ Quy ước làm việc nhóm: **[CONTRIBUTING.md](CONTRIBUTING.md)** (bắt bu�
 
 | Hạng mục       | Công nghệ                                                 |
 | -------------- | --------------------------------------------------------- |
-| Runtime / Web  | Node.js ≥ 22, Express 5                                   |
+| Runtime / Web  | Node.js ≥ 22.23.5, Express 5                              |
 | View (SSR)     | express-handlebars (layout + partial + helper `section`)  |
 | CSDL           | PostgreSQL 17, Knex (query builder, migration, seed)      |
 | Session        | express-session lưu trong PostgreSQL (connect-pg-simple)  |
@@ -29,11 +29,11 @@ docker compose up --build
 
 | Dịch vụ             | Địa chỉ                        |
 | ------------------- | ------------------------------ |
-| Ứng dụng            | http://localhost:3000          |
-| Tài liệu API        | http://localhost:3000/api-docs |
-| Kiểm tra hệ thống   | http://localhost:3000/health   |
-| Mailpit (xem email) | http://localhost:8025          |
-| PostgreSQL (từ máy) | localhost:5432                 |
+| Ứng dụng            | http://localhost:3101          |
+| Tài liệu API        | http://localhost:3101/api-docs |
+| Kiểm tra hệ thống   | http://localhost:3101/health   |
+| Mailpit (xem email) | http://localhost:8026          |
+| PostgreSQL (từ máy) | localhost:55433                |
 
 Container app tự chạy: `migrate:latest` → seed (nếu `SEED_ON_START=true`) → start server.
 
@@ -54,16 +54,36 @@ docker compose up -d --no-build
 
 ## Chạy local để phát triển
 
+Yêu cầu: Node.js ≥ 22.23.5 (khuyến nghị Node.js 24) và Docker Compose.
+
 ```bash
 npm install
 cp .env.example .env              # Windows PowerShell: Copy-Item .env.example .env
 docker compose up -d db mailpit   # chỉ chạy PostgreSQL + Mailpit
-npm run migrate
-npm run seed
-npm run dev                       # http://localhost:3000, tự reload khi sửa code
+npm run migrate && npm run seed
+npm run dev                       # http://localhost:3101, tự reload khi sửa code
 ```
 
 Nếu đã đổi `DB_PORT_HOST` cho container DB thì sửa `DB_PORT` trong `.env` cho khớp.
+
+**Nếu cổng 5432, 8025 hoặc 1025 đang được dùng**, đổi các cổng host trong `.env`:
+
+```dotenv
+DB_PORT=55433
+DB_PORT_HOST=55433
+SMTP_PORT=1026
+MAILPIT_UI_PORT=8026
+MAILPIT_SMTP_PORT=1026
+```
+
+Sau đó chạy PostgreSQL và Mailpit bằng một Compose project riêng. Project riêng tạo volume DB riêng, tránh dùng nhầm dữ liệu/mật khẩu từ một container cũ mà không cần xóa volume hiện tại:
+
+```bash
+docker compose -p busticket-qnhu up -d db mailpit
+npm run migrate && npm run seed && npm run dev
+```
+
+Nếu `migrate` hoặc `seed` báo lỗi, không chạy tiếp `npm run dev`; sửa kết nối DB trước. Dùng `docker compose -p busticket-qnhu logs db` để xem log PostgreSQL.
 
 ## Scripts
 

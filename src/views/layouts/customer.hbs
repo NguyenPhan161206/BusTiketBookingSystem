@@ -10,15 +10,31 @@
   {{{_sections.head}}}
 </head>
 <body class="d-flex flex-column min-vh-100">
-  {{!-- ============================================================
-       LAYOUT KHÁCH HÀNG - khung trống do base dựng.
-       TV3 phụ trách hoàn thiện header / navbar / footer.
-       ============================================================ --}}
   <header>
-    {{!-- TODO(TV3): navbar khách hàng (logo, menu, đăng nhập/tài khoản) --}}
-    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+    <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
       <div class="container">
-        <a class="navbar-brand fw-semibold" href="/">{{appName}}</a>
+        <a class="navbar-brand fw-bold text-primary" href="/">{{appName}}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#customerNavbar"
+          aria-controls="customerNavbar" aria-expanded="false" aria-label="Mở menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="customerNavbar">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Trang chủ</a></li>
+          </ul>
+          <div class="d-flex flex-column flex-lg-row gap-2 py-2 py-lg-0">
+            {{#if currentUser}}
+              <a class="btn btn-outline-primary" href="/account/profile">Tài khoản</a>
+              <form method="post" action="/auth/logout">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <button class="btn btn-primary w-100" type="submit">Đăng xuất</button>
+              </form>
+            {{else}}
+              <a class="btn btn-outline-primary" href="/auth/login">Đăng nhập</a>
+              <a class="btn btn-primary" href="/auth/register">Đăng ký</a>
+            {{/if}}
+          </div>
+        </div>
       </div>
     </nav>
   </header>
